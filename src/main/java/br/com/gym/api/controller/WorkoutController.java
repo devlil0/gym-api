@@ -1,6 +1,5 @@
 package br.com.gym.api.controller;
 
-
 import br.com.gym.api.dto.WorkoutDTO;
 import br.com.gym.api.exception.NotFoundException;
 import br.com.gym.api.service.WorkoutService;
@@ -15,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class WorkoutController {
 
-
     private final WorkoutService workoutService;
 
     @PostMapping
@@ -23,7 +21,4 @@ public class WorkoutController {
     public void create(@Valid @RequestBody WorkoutDTO dto) throws NotFoundException, BadRequestException {
         workoutService.save(dto);
     }
-
-
-
 }

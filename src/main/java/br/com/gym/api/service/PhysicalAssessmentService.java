@@ -21,15 +21,15 @@ public class PhysicalAssessmentService {
     private final IPhysicalAssessmentRepository physicalAssessmentRepository;
     private final IStudentRepository studentRepository;
 
-    public List<PhysicalAssessmentEntity> findAll(){
+    public List<PhysicalAssessmentEntity> findAll() {
         return physicalAssessmentRepository.findAll();
     }
 
     public void save(PhysicalAssessmentDTO dto) throws BadRequestException {
+        StudentEntity student = studentRepository.findById(dto.getId())
+                .orElseThrow(() -> new BadRequestException("STUDENT NOT FOUND"));
 
-        StudentEntity student = studentRepository.findById(dto.getId()).orElseThrow(() -> new BadRequestException("STUDENT NOT FOUND"));
-
-        if(student.getPhysicalAssessment() != null){
+        if (student.getPhysicalAssessment() != null) {
             throw new BadRequestException("STUDENT ALREADY HAS A PHYSICAL ASSESSMENT");
         }
 
@@ -41,39 +41,35 @@ public class PhysicalAssessmentService {
 
         student.setPhysicalAssessment(assessment);
         studentRepository.save(student);
-
     }
 
-
-    public List<PhysicalAssessmentEntity> findByBodyFatPercentage(Double bodyFatPercentage){
-
+    public List<PhysicalAssessmentEntity> findByBodyFatPercentage(Double bodyFatPercentage) {
         return physicalAssessmentRepository.findByBodyFatPercentage(bodyFatPercentage);
     }
 
-    public PhysicalAssessmentEntity findById(Long id){
-
-        return physicalAssessmentRepository.findById(id).orElseThrow(() -> new RuntimeException("NOT FOUND"));
+    public PhysicalAssessmentEntity findById(Long id) {
+        return physicalAssessmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("NOT FOUND"));
     }
 
-    public void delete(Long id){
-
-        PhysicalAssessmentEntity physicalAssessment = physicalAssessmentRepository.findById(id).orElseThrow(() -> new RuntimeException("NOT FOUND"));
+    public void delete(Long id) {
+        PhysicalAssessmentEntity physicalAssessment = physicalAssessmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("NOT FOUND"));
         physicalAssessmentRepository.delete(physicalAssessment);
     }
 
-    public PhysicalAssessmentEntity update(PhysicalAssessmentDTO dto, Long id){
-
-        PhysicalAssessmentEntity physicalAssessment = physicalAssessmentRepository.findById(id).orElseThrow(() -> new RuntimeException("NOT FOUND"));
+    public PhysicalAssessmentEntity update(PhysicalAssessmentDTO dto, Long id) {
+        PhysicalAssessmentEntity physicalAssessment = physicalAssessmentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("NOT FOUND"));
 
         physicalAssessment.setWeight(dto.getWeight());
         physicalAssessment.setHeight(dto.getHeight());
+        physicalAssessment.setBodyFatPercentage(dto.getBodyFatPercentage());
 
         return physicalAssessmentRepository.save(physicalAssessment);
     }
 
-    public List<PhysicalAssessmentProjection> getAllAssessment(){
+    public List<PhysicalAssessmentProjection> getAllAssessment() {
         return physicalAssessmentRepository.getAllAssessment();
     }
-
-
 }

@@ -8,6 +8,7 @@ import br.com.gym.api.database.repository.IStudentRepository;
 import br.com.gym.api.database.repository.IWorkoutRepository;
 import br.com.gym.api.dto.WorkoutDTO;
 import br.com.gym.api.exception.NotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
@@ -26,26 +27,36 @@ public class WorkoutService {
     private final IStudentRepository studentRepository;
 
 
-    //im using DTO for security
+    @Transactional
     public void save(WorkoutDTO dto) throws NotFoundException, BadRequestException {
-        Set<ExerciseEntity> exerciseSet = new HashSet<>();
-        StudentEntity student = studentRepository.findById(dto.getStudentId()).orElseThrow(() -> new NotFoundException("STUDENT NOT FOUND"));
 
-        WorkoutEntity workout = workoutRepository.findByNameAndStudentId(dto.getName(), dto.getStudentId()).orElse(null);
-        if (workout != null){
+        Set<ExerciseEntity> exerciseSet = new HashSet<>();
+
+        // ✔️ agora garantido que existe no banco
+        StudentEntity student = studentRepository.findById(dto.getStudentId())
+                .orElseThrow(() -> new NotFoundException("STUDENT NOT FOUND"));
+
+        WorkoutEntity workout = workoutRepository
+                .findByNameAndStudentId(dto.getName(), dto.getStudentId())
+                .orElse(null);
+
+        if (workout != null) {
             throw new BadRequestException("ALREADY EXIST AN WORKOUT WITH THIS NAME");
         }
 
-        for(Long exerciseId : dto.getExerciseIds()){
-            ExerciseEntity exercise = exerciseRepository.findById(exerciseId).orElseThrow(() -> new BadRequestException(String.format("EXERCISE %s NOT FOUND", exerciseId)));
-
+        for (Long exerciseId : dto.getExerciseIds()) {
+            ExerciseEntity exercise = exerciseRepository.findById(exerciseId)
+                    .orElseThrow(() -> new BadRequestException("EXERCISE NOT FOUND"));
             exerciseSet.add(exercise);
         }
 
-        workoutRepository.save(WorkoutEntity.builder()
-                .name(dto.getName())
-                .objective(dto.getObjective())
-                .student(student)
-                .workoutExerciseList(exerciseSet).build());
+        workoutRepository.save(
+                WorkoutEntity.builder()
+                        .name(dto.getName())
+                        .objective(dto.getObjective())
+                        .student(student)
+                        .workoutExerciseList(exerciseSet)
+                        .build()
+        );
     }
 }

@@ -1,34 +1,28 @@
+
 package br.com.gym.api.database.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "student_id")
-@Data
-@AllArgsConstructor
+@Getter
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-
-//this class represents a table in database
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class StudentEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @EqualsAndHashCode.Include
     private Long id;
 
-    @NotBlank
     private String name;
-
-    @NotBlank
-    @Column(unique = true)
     private String email;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -37,6 +31,4 @@ public class StudentEntity {
 
     @OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
     private Set<WorkoutEntity> workoutList = new HashSet<>();
-
 }
-

@@ -15,50 +15,41 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExerciseController {
 
-
     private final ExerciseService exerciseService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ExerciseEntity> findAll() {
-
         return exerciseService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@Valid @RequestBody ExerciseDTO dto){
-       exerciseService.save(dto);
+    public void create(@Valid @RequestBody ExerciseDTO dto) {
+        exerciseService.save(dto);
     }
 
     @GetMapping("/group/{muscleGroup}")
-    @ResponseStatus(HttpStatus.FOUND)
-    public List<ExerciseEntity> findByMuscleGroup(@PathVariable String muscleGroup){
-
+    @ResponseStatus(HttpStatus.OK)
+    public List<ExerciseEntity> findByMuscleGroup(@PathVariable String muscleGroup) {
         return exerciseService.findByMuscleGroup(muscleGroup);
     }
 
-
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseEntity findById(@PathVariable Long id){
-
+    public ExerciseEntity findById(@PathVariable Long id) {
         return exerciseService.findById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ExerciseEntity update(@PathVariable Long id, @RequestBody ExerciseDTO dto){
-
+    public ExerciseEntity update(@PathVariable Long id, @RequestBody ExerciseDTO dto) {
         return exerciseService.update(dto, id);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
-
+    public void delete(@PathVariable Long id) {
         exerciseService.delete(id);
     }
-
-
 }

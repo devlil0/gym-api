@@ -1,6 +1,5 @@
 package br.com.gym.api.dto;
 
-import br.com.gym.api.database.model.PhysicalAssessmentEntity;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +10,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class StudentDTO {
 
     private Long id;
@@ -21,6 +19,4 @@ public class StudentDTO {
 
     @NotBlank
     private String email;
-
 }
-

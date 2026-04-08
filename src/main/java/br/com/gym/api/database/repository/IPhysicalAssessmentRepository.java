@@ -14,18 +14,15 @@ public interface IPhysicalAssessmentRepository extends JpaRepository<PhysicalAss
     List<PhysicalAssessmentEntity> findByBodyFatPercentage(Double bodyFatPercentage);
 
     @Query(value = """
-    SELECT 
-        s.id AS studentId,
-        s.name AS studentName,
-        pa.id AS assessmentId,
-        pa.weight AS weight,
-        pa.height AS height,
-        pa.body_fat_percentage_id AS bodyFatPercentage
-    FROM student_id s
-    LEFT JOIN physical_assessment_id pa 
-        ON s.physical_assessment_id = pa.id
-""", nativeQuery = true)
-
+            SELECT s.id AS studentId,
+                   s.name AS studentName,
+                   pa.id AS assessmentId,
+                   pa.weight AS weight,
+                   pa.height AS height,
+                   pa.body_fat_percentage_id AS bodyFatPercentage
+            FROM student_id s
+            LEFT JOIN physical_assessment_id pa
+                   ON s.physical_assessment_id = pa.id
+            """, nativeQuery = true)
     List<PhysicalAssessmentProjection> getAllAssessment();
-
 }

@@ -6,12 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-
 public class ExerciseDTO {
 
     private Long id;
@@ -27,6 +25,4 @@ public class ExerciseDTO {
 
     @NotBlank
     private String difficultyLevel;
-
 }
-
